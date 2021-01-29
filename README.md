@@ -26,14 +26,14 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='walkthrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-A major challnege I had was uploading all my SimpleToDo files on github because when I tried signing into github through the android app it would say an error eventhough my username and password were correct. 
-I tried using a personal token and used the command prompt to detect my idneitity. Finally I was able to share my files on github
+A major challenge I had was uploading all my SimpleToDo files on github because when I tried signing into github through the android app it would say an error even though my username and password were correct. 
+I used a personal token and used the command prompt to detect my identity which helped me share my files on github.
 
 ## License
 
