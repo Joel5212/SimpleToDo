@@ -1,5 +1,6 @@
 package com.example.simpletodo;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,8 +64,20 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-        itemsAdapter = new ItemAdapter(items, onLongClickListener);
+        ItemAdapter.OnClickListener onClickListener = new ItemAdapter.OnClickListener(){
+            @Override
+            public void onItemClicked(int adapterPosition) {
+                Log.d("Main Activity", "Single click at position " +  adapterPosition);
+                //create the new activity
+                Intent i = new Intent(MainActivity.this, EditActivity.class);
+                // pass the data being edited
+                i.putExtra(KEY_ITEM_TEXT, items.get(adapterPosition));
+                i.putExtra(KEY_ITEM_POSITION, adapterPosition);
+                // display the activity
+                startActivityForResult(i, EDIT_TEXT_CODE);
+            }
+        };
+        itemsAdapter = new ItemAdapter(items, onLongClickListener, onClickListener);
         rvItems.setAdapter(itemsAdapter);
         rvItems.setLayoutManager(new LinearLayoutManager(this));
         
@@ -89,7 +102,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-            //Persistance
+            //handle the result of the edit activity
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK &&  requestCode == EDIT_TEXT_CODE)
+        {
+            //Retrieve the updated text value
+            String itemText = data.getStringExtra(KEY_ITEM_TEXT);
+            //extract the original position of the edited item from the position key
+            int position = data.getExtras().getInt(KEY_ITEM_POSITION);
+            //update the model at the right position with the new item text
+            items.set(position, itemText);
+            //notify the adapter
+            itemsAdapter.notifyItemChanged(position);
+            //persist the changes
+            saveItems();
+            Toast.makeText(getApplicationContext(), "Item updated successfully!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            Log.w("MainActivity", "Unknown call to onActivityResult");
+        }
+    }
+
+    //Persistance
     private File getDataFile(){
         return new File(getFilesDir(), "data.txt");
     }
